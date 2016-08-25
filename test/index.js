@@ -173,13 +173,13 @@ tape('currying edge cases', t => {
   mew('__test__', fn)
 
   let curry = mew.__test__(args[0])
-  t.is(curry()(), curry, "curry doesn't change")
+  t.isNot(curry, curry = curry()(), "curry generates new functions")
   curry = curry(args[1])
-  t.is(curry(), curry, "curry doesn't change")
+  t.isNot(curry, curry = curry(), "curry generates new functions")
   curry = curry(args[2], ...format)
-  t.is(curry(), curry, "curry doesn't change")
+  t.isNot(curry, curry = curry(), "curry generates new functions")
   curry = curry(...format2)
-  t.is(curry(), curry, "curry doesn't change")
+  t.isNot(curry, curry = curry(), "curry generates new functions")
   delete mew.__test__
 
   t.end()
@@ -263,6 +263,14 @@ tape('curry blending', t => {
   curries3[3] = curries3[2](expected3[0])
   t.same(actual, expected3, 'reuse third curry')
 
+  delete mew.__test__
+  t.end()
+})
+
+tape('each instance is different', t => {
+  let fn = (a, b) => {}
+  mew('__test__', fn)
+  t.isNot(mew.__test__, mew.__test__, 'equivalence')
   delete mew.__test__
   t.end()
 })
