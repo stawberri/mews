@@ -1,4 +1,4 @@
-const tape = require('tape'), mew = require('../lib')
+const tape = require('tape'), mews = require('../lib')
 const path = require('path'), fs = require('fs'), util = require('util')
 
 tape('currying', t => {
@@ -39,13 +39,13 @@ tape('currying', t => {
     t.is(b, args[1], 'second argument')
     t.is(c, args[2], 'third argument')
   }
-  mew('__test__', fn)
+  mews('__test__', fn)
 
-  let curry = mew.__test__
-  args.forEach(arg => curry = curry(arg))
-  curry = curry(...format)
-  curry = curry(...format2)
-  delete mew.__test__
+  let mew = mews.__test__
+  args.forEach(arg => mew = mew(arg))
+  mew = mew(...format)
+  mew = mew(...format2)
+  delete mews.__test__
 })
 
 tape('currying edge cases', t => {
@@ -94,72 +94,72 @@ tape('currying edge cases', t => {
     t.is(b, args[1], 'second argument')
     t.is(c, args[2], 'third argument')
   }
-  mew('__test__', fn)
+  mews('__test__', fn)
 
-  let curry = mew.__test__(args[0])
-  t.isNot(curry, curry = curry()(), "curry generates new functions")
-  curry = curry(args[1])
-  t.isNot(curry, curry = curry(), "curry generates new functions")
-  curry = curry(args[2], ...format)
-  t.isNot(curry, curry = curry(), "curry generates new functions")
-  curry = curry(...format2)
-  t.isNot(curry, curry = curry(), "curry generates new functions")
-  delete mew.__test__
+  let mew = mews.__test__(args[0])
+  t.isNot(mew, mew = mew()(), "curry generates new functions")
+  mew = mew(args[1])
+  t.isNot(mew, mew = mew(), "curry generates new functions")
+  mew = mew(args[2], ...format)
+  t.isNot(mew, mew = mew(), "curry generates new functions")
+  mew = mew(...format2)
+  t.isNot(mew, mew = mew(), "curry generates new functions")
+  delete mews.__test__
 
   t.end()
 })
 
 tape('curry blending', t => {
   let expected = [`mew ${Math.random()} mew`, Symbol('1a'), Symbol('1b')]
-  let curries = []
+  let mew = []
   let actual = []
   let fn = (str, a, b) => actual = [str, a, b]
 
-  mew('__test__', fn)
+  mews('__test__', fn)
 
-  curries[0] = mew.__test__()()()
-  curries[1] = curries[0](expected[1])
-  curries[2] = curries[1](expected[2])
-  curries[3] = curries[2](expected[0])
+  mew[0] = mews.__test__()()()
+  mew[1] = mew[0](expected[1])
+  mew[2] = mew[1](expected[2])
+  mew[3] = mew[2](expected[0])
   t.same(actual, expected, 'first curry is good')
 
   let expected2 = expected.slice()
-  let curries2 = curries.slice()
+  let mew2 = mew.slice()
   expected2[2] = Symbol('2b')
   expected2[0] = `nya ${Math.random()} nya`
-  curries2[2] = curries2[1](expected2[2])
-  curries2[3] = curries2[2](expected2[0])
+  mew2[2] = mew2[1](expected2[2])
+  mew2[3] = mew2[2](expected2[0])
   t.same(actual, expected2, 'second curry is good')
 
   expected[0] = `kya ${Math.random()} kya`
-  curries[3] = curries[2](expected[0])
+  mew[3] = mew[2](expected[0])
   t.same(actual, expected, 'reuse first curry')
 
   expected2[0] = `uwa ${Math.random()} uwa`
-  curries2[3] = curries2[2](expected2[0])
+  mew2[3] = mew2[2](expected2[0])
   t.same(actual, expected2, 'reuse second curry')
 
   let expected3 = [`pyo ${Math.random()} pyo`, Symbol('3a'), Symbol('3b')]
-  let curries3 = [curries2[0]]
-  curries3[1] = curries3[0](expected3[1])
-  curries3[2] = curries3[1](expected3[2])
-  curries3[3] = curries3[2](expected3[0])
+  let mew3 = [mew2[0]]
+  mew3[1] = mew3[0](expected3[1])
+  mew3[2] = mew3[1](expected3[2])
+  mew3[3] = mew3[2](expected3[0])
   t.same(actual, expected3, 'third curry is good')
 
   expected[0] = `wah ${Math.random()} wah`
-  curries[3] = curries[2](expected[0])
+  mew[3] = mew[2](expected[0])
   t.same(actual, expected, 'reuse first curry')
 
   expected2[2] = Symbol('2.2b')
   expected2[0] = `ehh ${Math.random()} ehh`
-  curries2[2] = curries2[1](expected2[2])
-  curries2[3] = curries2[2](expected2[0])
+  mew2[2] = mew2[1](expected2[2])
+  mew2[3] = mew2[2](expected2[0])
   t.same(actual, expected2, 'reuse second curry')
 
   expected3[0] = `weh ${Math.random()} weh`
-  curries3[3] = curries3[2](expected3[0])
+  mew3[3] = mew3[2](expected3[0])
   t.same(actual, expected3, 'reuse third curry')
 
-  delete mew.__test__
+  delete mews.__test__
   t.end()
 })

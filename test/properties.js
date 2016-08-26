@@ -1,21 +1,21 @@
-const tape = require('tape'), mew = require('../lib')
+const tape = require('tape'), mews = require('../lib')
 
 tape('setter works', t => {
   t.plan(3)
   let expected = Symbol('1')
   let fn = a => {}
   fn.setter = actual => t.is(actual, expected, 'equivalence')
-  mew('__test__', fn)
+  mews('__test__', fn)
 
-  mew.__test__ = expected
+  mews.__test__ = expected
 
   expected = Symbol('2')
-  mew.__test__ = expected
+  mews.__test__ = expected
 
   expected = Symbol('3')
-  mew.__test__ = expected
+  mews.__test__ = expected
 
-  delete mew.__test__
+  delete mews.__test__
 })
 
 let paramChecker = (t, actual, expected, msg) => {
@@ -43,17 +43,17 @@ tape('properties are kept if they are never changed', t => {
   fn.setter = function(a) { paramChecker(t, this, expected, `setter: ${a}`) }
   fn.properties = copy(expected)
 
-  mew('__test__', fn)
+  mews('__test__', fn)
 
-  let curry = mew.__test__(1)
-  curry = curry(2)
-  curry = curry(3)
+  let mew = mews.__test__(1)
+  mew = mew(2)
+  mew = mew(3)
 
-  mew.__test__ = 1
+  mews.__test__ = 1
 
-  curry = curry(4)
+  mew = mew(4)
 
-  delete mew.__test__
+  delete mews.__test__
   t.end()
 })
 
@@ -72,43 +72,43 @@ tape('properties can change', t => {
   fn.properties = copy(original)
   fn.properties.f = {value: false, writable: true}
 
-  mew('__test__', fn)
+  mews('__test__', fn)
 
   let expected = copy(original)
-  let curry = []
-  curry[0] = mew.__test__.f
+  let mew = []
+  mew[0] = mews.__test__.f
   expected.f = !expected.f
-  ;(curry[1] = curry[0](0)).string = Symbol('meow')
+  ;(mew[1] = mew[0](0)).string = Symbol('meow')
   expected.string = String(Symbol('meow'))
-  ;(curry[2] = curry[1](1)).num = '16'
+  ;(mew[2] = mew[1](1)).num = '16'
   expected.num = Number('16')
-  ;(curry[3] = curry[2](2)).undef = 28 // enough parameters
+  ;(mew[3] = mew[2](2)).undef = 28 // enough parameters
   let testSymbol = Symbol('nyaa')
-  ;(curry[4] = curry[3](3)).symbol = testSymbol
+  ;(mew[4] = mew[3](3)).symbol = testSymbol
   expected.symbol = testSymbol
   let expected4 = copy(expected)
-  ;(curry[5] = curry[4](4)).t = 'uwah'
-  curry[6] = curry[5](5).symbol
+  ;(mew[5] = mew[4](4)).t = 'uwah'
+  mew[6] = mew[5](5).symbol
   expected.symbol = original.symbol
-  curry[7] = curry[6](6)
+  mew[7] = mew[6](6)
   let expected7 = copy(expected)
 
   expected = copy(original)
-  mew.__test__ = 'originals'
+  mews.__test__ = 'originals'
 
   expected = copy(expected4)
-  curry[5] = curry[4]('4b').num
+  mew[5] = mew[4]('4b').num
   expected.num = original.num
-  curry[6] = curry[5]('5b')
+  mew[6] = mew[5]('5b')
 
   expected = copy(expected7)
-  curry[8] = curry[7]('7c').t
+  mew[8] = mew[7]('7c').t
   expected.t = !expected.t
-  curry[9] = curry[8]('8c').string
+  mew[9] = mew[8]('8c').string
   expected.string = original.string
-  curry[9]('9c')
+  mew[9]('9c')
 
-  delete mew.__test__
+  delete mews.__test__
   t.end()
 })
 
@@ -154,26 +154,26 @@ tape('getters and setters', t => {
     neitherTest: {}
   }
 
-  mew('__test__', fn)
+  mews('__test__', fn)
 
-  let curry = mew.__test__(1)
-  curry.getTest = Symbol('get')
-  curry = curry.getTest(2)
-  curry.objTest = Symbol('obj')
-  curry = curry.objTest(3)
-  curry.setTest = expected.s
-  curry = curry.setTest(4)
-  curry.bothTest = expected.t
-  curry = curry.bothTest(5)
-  curry.neitherTest = Symbol('neither')
-  curry = curry.neitherTest(6)
-  curry('a')
+  let mew = mews.__test__(1)
+  mew.getTest = Symbol('get')
+  mew = mew.getTest(2)
+  mew.objTest = Symbol('obj')
+  mew = mew.objTest(3)
+  mew.setTest = expected.s
+  mew = mew.setTest(4)
+  mew.bothTest = expected.t
+  mew = mew.bothTest(5)
+  mew.neitherTest = Symbol('neither')
+  mew = mew.neitherTest(6)
+  mew('a')
 
   expected = {}
-  mew.__test__('b', 1, 2, 3, 4)
-  mew.__test__ = 'c'
+  mews.__test__('b', 1, 2, 3, 4)
+  mews.__test__ = 'c'
 
-  delete mew.__test__
+  delete mews.__test__
   t.end()
 })
 
@@ -184,22 +184,22 @@ tape('object properties', t => {
       value() {}
     }
   }
-  mew('__test__', fn)
+  mews('__test__', fn)
   t.throws(() => {
-    mew.__test__
+    mews.__test__
   }, 'function')
-  delete mew.__test__
+  delete mews.__test__
 
   fn.properties = {
     badObj: {
       value: {}
     }
   }
-  mew('__test__', fn)
+  mews('__test__', fn)
   t.throws(() => {
-    mew.__test__
+    mews.__test__
   }, 'object')
-  delete mew.__test__
+  delete mews.__test__
 
   let expected = {immutable: true, unchanging: true}
   fn = function(a) { paramChecker(t, this, expected, `function call: ${a}`) }
@@ -213,11 +213,11 @@ tape('object properties', t => {
       writable: false
     }
   }
-  mew('__test__', fn)
-  let curry = mew.__test__.immutable(1)
-  curry.unchanging = false
-  curry(2)
-  delete mew.__test__
+  mews('__test__', fn)
+  let mew = mews.__test__.immutable(1)
+  mew.unchanging = false
+  mew(2)
+  delete mews.__test__
 
   t.end()
 })

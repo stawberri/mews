@@ -1,8 +1,8 @@
-const tape = require('tape'), mew = require('../lib')
+const tape = require('tape'), mews = require('../lib')
 const path = require('path'), fs = require('fs'), util = require('util')
 
-tape('mew is a function', t => {
-  t.is(typeof mew, 'function', 'typeof mew')
+tape('mews is a function', t => {
+  t.is(typeof mews, 'function', 'typeof mews')
   t.end()
 })
 
@@ -12,24 +12,24 @@ tape('uses functions', t => {
   let randomString = `Meow Meow ${Math.random()} Nyaa Nyaa`
   let fn = str => t.is(str, randomString, 'string equivalence')
 
-  mew('__test__', fn)
-  mew.__test__(randomString)
+  mews('__test__', fn)
+  mews.__test__(randomString)
 
   t.doesNotThrow(() => {
-    delete mew.__test__
-    t.is(mew.__test__, undefined, 'property deleted')
+    delete mews.__test__
+    t.is(mews.__test__, undefined, 'property deleted')
   }, 'deleting property')
 })
 
 tape('requires a parameter', t => {
   let fn = () => {}
-  mew('__test__', fn)
+  mews('__test__', fn)
 
   t.throws(() => {
-    mew.__test__
+    mews.__test__
   }, 'run function with no parameter')
 
-  delete mew.__test__
+  delete mews.__test__
 
   t.end()
 })
@@ -46,17 +46,17 @@ tape('requires non-functions', t => {
   `.replace(/^ {4}/mg, '')
 
   fs.writeFileSync(filename, fileData)
-  mew('__test__', filename)
+  mews('__test__', filename)
 
   t.doesNotThrow(() => {
-    mew.__test__(randomString)
+    mews.__test__(randomString)
   }, 'correct argument')
 
   t.throws(() => {
-    mew.__test__(wrongString)
+    mews.__test__(wrongString)
   }, 'incorrect argument')
 
-  delete mew.__test__
+  delete mews.__test__
 
   t.doesNotThrow(() => {
     try {
@@ -77,13 +77,13 @@ tape('requires an export of a function', t => {
   `.replace(/^ {4}/mg, '')
 
   fs.writeFileSync(filename, fileData)
-  mew('__test__', filename)
+  mews('__test__', filename)
 
   t.throws(() => {
-    mew.__test__
+    mews.__test__
   }, 'access non function')
 
-  delete mew.__test__
+  delete mews.__test__
 
   t.doesNotThrow(() => {
     try {
@@ -110,9 +110,9 @@ tape('formatted argument first', t => {
     t.is(b, args[1], 'second argument')
     t.is(c, args[2], 'third argument')
   }
-  mew('__test__', fn)
-  mew.__test__(...args)
-  delete mew.__test__
+  mews('__test__', fn)
+  mews.__test__(...args)
+  delete mews.__test__
   t.end()
 })
 
@@ -123,14 +123,14 @@ tape('does not require until called', t => {
   fs.writeFileSync(filename, fileData)
 
   t.doesNotThrow(() => {
-    mew('__test__', filename)
-  }, 'add to mew')
+    mews('__test__', filename)
+  }, 'add to mews')
 
   t.throws(() => {
-    mew.__test__()
+    mews.__test__()
   }, 'call function')
 
-  delete mew.__test__
+  delete mews.__test__
 
   t.doesNotThrow(() => {
     try {
@@ -145,8 +145,8 @@ tape('does not require until called', t => {
 
 tape('each instance is different', t => {
   let fn = (a, b) => {}
-  mew('__test__', fn)
-  t.isNot(mew.__test__, mew.__test__, 'equivalence')
-  delete mew.__test__
+  mews('__test__', fn)
+  t.isNot(mews.__test__, mews.__test__, 'equivalence')
+  delete mews.__test__
   t.end()
 })

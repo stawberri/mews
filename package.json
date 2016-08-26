@@ -1,10 +1,10 @@
 {
-  "name": "mew",
+  "name": "mews",
   "version": "0.0.0",
-  "description": "mew",
+  "description": "trust your output to a mews",
   "main": "lib/index.js",
   "scripts": {
-    "test": "tape test/*.js"
+    "test": "npm link tape && tape test/*.js"
   },
   "repository": {
     "type": "git",
