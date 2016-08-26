@@ -70,6 +70,7 @@ tape('properties can change', t => {
   let fn = function(a, b, c) { paramChecker(t, this, expected, `function call: ${a}`) }
   fn.setter = function(a) { paramChecker(t, this, expected, `setter: ${a}`) }
   fn.properties = copy(original)
+  fn.properties.f = {value: false, writable: true}
 
   mew('__test__', fn)
 
@@ -149,7 +150,8 @@ tape('getters and setters', t => {
       set(arg) {
         this.t = arg
       }
-    }
+    },
+    neitherTest: {}
   }
 
   mew('__test__', fn)
@@ -163,6 +165,8 @@ tape('getters and setters', t => {
   curry = curry.setTest(4)
   curry.bothTest = expected.t
   curry = curry.bothTest(5)
+  curry.neitherTest = Symbol('neither')
+  curry = curry.neitherTest(6)
   curry('a')
 
   expected = {}
@@ -170,5 +174,50 @@ tape('getters and setters', t => {
   mew.__test__ = 'c'
 
   delete mew.__test__
+  t.end()
+})
+
+tape('object properties', t => {
+  fn = ok => {}
+  fn.properties = {
+    badFn: {
+      value() {}
+    }
+  }
+  mew('__test__', fn)
+  t.throws(() => {
+    mew.__test__
+  }, 'function')
+  delete mew.__test__
+
+  fn.properties = {
+    badObj: {
+      value: {}
+    }
+  }
+  mew('__test__', fn)
+  t.throws(() => {
+    mew.__test__
+  }, 'object')
+  delete mew.__test__
+
+  let expected = {immutable: true, unchanging: true}
+  fn = function(a) { paramChecker(t, this, expected, `function call: ${a}`) }
+  fn.properties = {
+    immutable: {
+      value: true,
+      writable: false
+    },
+    unchanging: {
+      value: true,
+      writable: false
+    }
+  }
+  mew('__test__', fn)
+  let curry = mew.__test__.immutable(1)
+  curry.unchanging = false
+  curry(2)
+  delete mew.__test__
+
   t.end()
 })
