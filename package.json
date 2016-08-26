@@ -21,8 +21,5 @@
   "bugs": {
     "url": "https://github.com/stawberri/mew/issues"
   },
-  "homepage": "https://github.com/stawberri/mew#readme",
-  "devDependencies": {
-    "tape": "^4.6.0"
-  }
+  "homepage": "https://github.com/stawberri/mew#readme"
 }
