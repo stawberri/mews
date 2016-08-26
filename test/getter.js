@@ -21,6 +21,19 @@ tape('uses functions', t => {
   }, 'deleting property')
 })
 
+tape('requires a parameter', t => {
+  let fn = () => {}
+  mew('__test__', fn)
+
+  t.throws(() => {
+    mew.__test__
+  }, 'run function with no parameter')
+
+  delete mew.__test__
+
+  t.end()
+})
+
 tape('requires non-functions', t => {
   let filename = path.join(__dirname, '__test__require.js')
   let randomString = `Meow Meow ${Math.random()} Nyaa Nyaa`
@@ -42,6 +55,33 @@ tape('requires non-functions', t => {
   t.throws(() => {
     mew.__test__(wrongString)
   }, 'incorrect argument')
+
+  delete mew.__test__
+
+  t.doesNotThrow(() => {
+    try {
+      fs.unlinkSync(filename)
+    } catch(e) {
+      if(e.code !== 'ENOENT') throw String(e)
+    }
+  }, 'deleting file')
+
+  t.end()
+})
+
+tape('requires an export of a function', t => {
+  let filename = path.join(__dirname, '__test__function.js')
+
+  let fileData = `
+    module.exports = {}
+  `.replace(/^ {4}/mg, '')
+
+  fs.writeFileSync(filename, fileData)
+  mew('__test__', filename)
+
+  t.throws(() => {
+    mew.__test__
+  }, 'access non function')
 
   delete mew.__test__
 
