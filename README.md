@@ -2,7 +2,7 @@
 trust your output to a mews
 
 [![NPM](https://nodei.co/npm/mews.png?mini=true)](https://nodei.co/npm/mews/)
-[![Build Status](https://travis-ci.org/stawberri/mews.svg?branch=master)](https://travis-ci.org/stawberri/mew)
+[![Build Status](https://travis-ci.org/stawberri/mews.svg?branch=master)](https://travis-ci.org/stawberri/mews)
 
 mews are intended to make sending messages over [Telegram](https://telegram.org/) as easy as using `console.log`.
 
