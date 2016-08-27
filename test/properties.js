@@ -221,3 +221,29 @@ tape('object properties', t => {
 
   t.end()
 })
+
+tape('function modification scope', t => {
+  let expected = false
+  let fn = function(str) {t.is(this.actual, expected, str)}
+  fn.properties = {
+    actual: false,
+    toggle() {this.actual = !this.actual}
+  }
+  mews('__test__', fn)
+
+  let mew = []
+  mew[0] = mews.__test__('initial state')
+  expected = true
+  mew[1] = mew[0].toggle('first flip')
+  expected = false
+  mew[0]('initial state retry')
+  expected = true
+  mew[1].toggle.toggle('double flip')
+  mew[2] = mew[1].toggle.toggle('double flip again')
+  expected = false
+  mew[2].toggle('single flip')
+  mew[2].toggle('single flip again')
+
+  delete mews.__test__
+  t.end()
+})
