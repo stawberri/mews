@@ -144,10 +144,10 @@ Send a message to the account with `chatID` from the bot with given `botToken`. 
 * `mew.html` *toggle*. Switch on HTML parsing mode, which supports a subset of tags: `<b> <i> <a href=""> <code> <pre>`
 * `mew.noPreview` *toggle*. Disable link previews.
 * `mew.noNotify` *toggle*. Disable notifications for message.
-* `mew.reply_markup =` *string*. Configure `reply_markup` request variable, typically for controlling how a user would reply to your message.
+* `mew.reply_markup = ''` *string*. Configure `reply_markup` request variable, typically for controlling how a user would reply to your message.
 * `mew.disable_web_page_preview` *alias*. `mew.noPreview`
 * `mew.disable_notification` *alias*. `mew.noNotify`
-* `mew.parse_mode =` *string*. Actual `parse_mode` variable as sent in request to Telegram. `mew.markdown` and `mew.html` modify this variable for you so you don't have to.
+* `mew.parse_mode = ''` *string*. Actual `parse_mode` variable as sent in request to Telegram. `mew.markdown` and `mew.html` modify this variable for you so you don't have to.
 
 ```js
 let mew = mews.telegram(botToken, chatID)
