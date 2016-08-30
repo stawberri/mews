@@ -84,7 +84,7 @@ let mew = mews.log
 mew.err("Error error! Time to panic nyow!")
 ```
 
-Properties can go anywhere. Simple properties like `.markdown` simply return a new mew. You generally wouldn't use a simple property multiple times, but this is completely valid:
+Properties can go anywhere. Simple properties like `.err` simply return a new mew. You generally wouldn't use a simple property multiple times, but this is completely valid:
 
 ```js
 let mew = mews.telegram.noNotify // noNotify on
