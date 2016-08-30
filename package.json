@@ -1,6 +1,6 @@
 {
   "name": "mews",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "trust your output to a mews",
   "main": "lib/index.js",
   "scripts": {
