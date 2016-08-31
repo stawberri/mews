@@ -81,7 +81,7 @@ tape('properties can change', t => {
   ;(mew[1] = mew[0](0)).string = Symbol('meow')
   expected.string = String(Symbol('meow'))
   ;(mew[2] = mew[1](1)).num = '16'
-  expected.num = Number('16')
+  expected.num = +'16'
   ;(mew[3] = mew[2](2)).undef = 28 // enough parameters
   let testSymbol = Symbol('nyaa')
   ;(mew[4] = mew[3](3)).symbol = testSymbol
