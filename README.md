@@ -4,7 +4,7 @@ trust your output to a mews
 [![NPM](https://nodei.co/npm/mews.png?mini=true)](https://nodei.co/npm/mews/)
 [![Build Status](https://travis-ci.org/stawberri/mews.svg?branch=master)](https://travis-ci.org/stawberri/mews)
 
-mews are intended to make sending messages over [Telegram](https://telegram.org/) as easy as using `console.log`.
+mews are intended to make sending messages on Telegram and Twitter as easy as using `console.log`.
 
 ```js
 const mews = require('mews')
@@ -134,7 +134,7 @@ mew.err('Error message') // STDERR
 ### mew = mews.telegram(botToken, chatID, ...output)
 Send a message to the account with `chatID` from the bot with given `botToken`. Requires the recipient to have messaged the bot at least once.
 
-* `botToken` *string*. Your telegram bot's API token. You get this when you create your bot, and can ask BotFather for it again with the `/token` command.
+* `botToken` *string*. Your telegram bot's API token. [BotFather](https://telegram.me/BotFather) will tell give you this when you create a bot or use the `/token` command.
 * `chatID` *string*. Your recipient's chat ID, which is usually a positive integer for users, a negative integer for groups, or a name for channels.
 * `...output` Desired output.
 
@@ -157,4 +157,25 @@ mdn.noPreview('[No preview](https://npm.im/mews)') // Markdown & noPreview
 let rpy = mdn() // Clone mdn => rpy
 rpy.reply_markup = JSON.stringify({force_reply: true}) // Modify rpy
 rpy(`_Meow_ you're in reply mode!`) // Markdown & force_reply
+```
+
+### mew = mews.twitter(consumer\_key, consumer\_secret, token, token_secret, ...output)
+Send a tweet on twitter with the provided app and account details. You can grab some from Twitter's [Application Management site](https://apps.twitter.com).
+
+* `consumer_key` *string*. Twitter app consumer key (api key)
+* `consumer_secret` *string*. Twitter app consumer secret (api secret)
+* `token` *string*. Twitter user access token
+* `token_secret` *string*. Twitter user access token secret
+* `...output` Desired output.
+
+#### twitter configuration
+
+* `mew.sensitive` *toggle*. Flags your tweet as potentially containing sensitive content.
+* `mew.possibly_sensitive` *alias*. `mew.sensitive`
+
+```js
+let mew = mews.twitter(cKey, cSecret)
+mew = mews.twitter(token, tSecret)
+
+mew('This is a tweet.')
 ```
