@@ -171,8 +171,8 @@ Send a tweet on twitter with the provided app and account details. You can grab 
 #### twitter configuration
 
 * `mew.sensitive` *toggle*. Flags your tweet as potentially containing sensitive content.
-* `mew.replyTo = ''` *string*. The ID of a tweet you would like to reply to. You would need some other way of finding a tweet ID, and you also need to include `@username` in your tweet message, where `username` is the username of the account that tweeted the tweet.
-* `mew.dm = ''` *string*. If this is set, your message will be sent as a DM to a recipient specified by this value. If this value contains only digits, it will be treated as a user ID. If it contains anything other than digits, it will be considered a username. A `@` at the beginning of usernames is optional, unless the person you are trying to message has a username that is all digits.
+* `mew.replyTo = ''` *string*. The ID of a tweet you would like to reply to. This doesn't do anything unless your tweet text contains `@username`, where `username` is the username of the account that tweeted the tweet.
+* `mew.dm = ''` *string*. If this is set, your message will be sent as a DM to a recipient specified by this value. If this value contains only digits, it will be treated as a user ID. If it contains anything other than digits, it will be considered a username. You must include a `@` before a username that is all digits (to differentiate it from a user id), but it's optional otherwise.
 * `mew.in_reply_to_status_id` *alias*. `mew.replyTo`
 * `mew.possibly_sensitive` *alias*. `mew.sensitive`
 
