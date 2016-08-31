@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/stawberri/mew/issues"
   },
-  "homepage": "https://github.com/stawberri/mew#readme"
+  "homepage": "https://github.com/stawberri/mew#readme",
+  "dependencies": {
+    "request": "^2.74.0"
+  }
 }
