@@ -154,9 +154,13 @@ Providing a string as `details` is equivalent to providing an object with only a
 * `mew.noPreview` *toggle*. Disables all link previews.
 
 ```js
-let mew = mews.slack(apiToken, channel)
+let mewWithToken = mews.slack(apiToken)
+let mew = mewWithToken(channel)
 mew('This is a normal, fully parsed message that shows link previews.')
 mew.noParse('<https://api.slack.com/docs/message-formatting|This syntax> is difficult to use.')
+
+mew = mewWithToken({channel, name: 'Yummy', emoji: ':strawberry:'})
+mew('My name is Yummy and I have a strawberry as an icon.')
 ```
 
 ## Telegram
