@@ -4,7 +4,7 @@ trust your output to a mews
 [![NPM](https://nodei.co/npm/mews.png?mini=true)](https://nodei.co/npm/mews/)
 [![Build Status](https://travis-ci.org/stawberri/mews.svg?branch=master)](https://travis-ci.org/stawberri/mews)
 
-mews are intended to make sending messages on Telegram and Twitter as easy as using `console.log`.
+mews are intended to make sending messages on [Slack](#slack), [Telegram](#telegram), and [Twitter](#twitter) as easy as using `console.log`.
 
 ```js
 const mews = require('mews')
@@ -13,10 +13,9 @@ let mew = mews.telegram(apiToken, chatID)
 mew(`Warning: ${name} is a cutie!`)
 ```
 
-[More information about supported services](#available-mews) is available below.
+[More information about supported services](#log) is available below.
 
 ## Using mews
-
 This package is a collection of mews (though I've actually only written two so far). You start by plucking the mew that you want to use off of the mews module:
 
 ```js
@@ -41,7 +40,6 @@ mew('%s: Found %d new cuties!', Date(), count)
 
 
 ### Building mews
-
 Each mew is actually a curried function. Officially, [curried functions](https://en.wikipedia.org/wiki/Currying) are weird monstrosities made of lots of little functions, but as far as we're concerned, they're just really lenient functions that are okay with not getting enough arguments. Where most functions will kick and scream at you, these just give you new functions that remember the arguments you've already provided.
 
 A freshly plucked mew will first take in all the configuration arguments it needs (across multiple calls, if necessary), and if there are any left over, the rest will be treated as output. After that happens, you'll just keep getting back additional complete mews that treat all their arguments as output.
@@ -76,7 +74,6 @@ friendMew("Hey there, cutie~ How are you today?")
 
 
 ### Configuring mews
-
 If you want to do more complicated things, mews are also configurable. For example, the `log` mew usually outputs messages to STDOUT, but you can use the `.err` simple property to switch over to STDERR:
 
 ```js
@@ -110,18 +107,19 @@ mew = mew.reply_markup
 mew('I fixed it!')
 ```
 
-If all this configuration stuff is too confusing, don't worry about it! You can use mews without worrying about configuring anything at all.
+If all this configuration stuff is too confusing, don't worry about it! You can use mews without worrying about configuring anything at all. Most of the time they're just there for completeness.
 
-## Available mews
-As stated above, all mews are curried, so function calls always return a partially applied mew remembering provided arguments other than the ones in `...output`.
+## Log
+Please note that this and all other mews are curried functions, as stated above. Calls always return a partially applied mew remembering provided arguments other than the ones in `...output`.
 
-### mew = mews.log(...output)
-Proof of concept mew that just calls `console.log`. May be worth noting that this function is four characters shorter than `console.log`.
+```js
+mew = mews.log(...output)
+```
+Proof of concept mew that just calls `console.log`.
 
 * `...output` Desired output.
 
-#### log configuration
-
+### Configuration
 * `mew.err` *toggle*. Print output to STDERR instead of STDOUT.
 * `mew.error` *alias*. `mew.err`
 
@@ -131,15 +129,41 @@ mew('Normal log message') // STDOUT
 mew.err('Error message') // STDERR
 ```
 
-### mew = mews.telegram(botToken, chatID, ...output)
+## Slack
+```js
+mew = mews.slack(apiToken, details, ...output)
+```
+Sends a message over Slack. The simplest way to use this is simply providing a channel name as `details`.
+
+* `apiToken` *string*. A Slack API token. Only tested with the ones provided by [Slack Bots](https://my.slack.com/apps/A0F7YS25R-bots), but any other Slack API Token will probably work too.
+* `details` This can be an object or string.
+  - *string*. A shortcut for setting the `channel` property below.
+  - *object*. The only required property is `channel`. See below for interactions between properties.
+    - `channel` *string*. The channel you would like to send your message to. Include a `@` before usernames to send a DM. You may optionally include a `#` before channel names. This is required.
+    - `name` *string*. A sender name for your message.
+    - `icon` *string*. A url to an image file to be used as your message's icon.
+    - `emoji` *string*. A Slack emoji to be used as your message's icon. Colons are required.
+* `...output` Desired output.
+
+Providing a string as `details` is equivalent to providing an object with only a `channel` property. If you do this, your bot (or whatever entity your API token corresponds to) must be in the channel specified. If you specify any of the other properties, this is *not* required.
+
+### Configuration
+* `mew.noParse` *toggle*. *Disables* the `full` parse mode. This allows you to use [Slack's formatting spec](https://api.slack.com/docs/message-formatting).
+* `mew.link_names` *toggle*. Enables channel and username auto-linking. This is only useful when used with `noParse`, because the `full` parse mode does this by default.
+* `mew.attachments = ''` *string*. A json string following [Slack's attachment spec](https://api.slack.com/docs/message-attachments).
+* `mew.noPreview` *toggle*. Disables all link previews.
+
+## Telegram
+```js
+mew = mews.telegram(botToken, chatID, ...output)
+```
 Send a message to the account with `chatID` from the bot with given `botToken`. Requires the recipient to have messaged the bot at least once.
 
 * `botToken` *string*. Your telegram bot's API token. [BotFather](https://telegram.me/BotFather) will tell give you this when you create a bot or use the `/token` command.
 * `chatID` *string*. Your recipient's chat ID, which is usually a positive integer for users, a negative integer for groups, or a name for channels.
 * `...output` Desired output.
 
-#### telegram configuration
-
+### Configuration
 * `mew.markdown` *toggle*. Switch on markdown parsing mode. Please note that the "markdown" supported by this mode is simplified from normal markdown: `*bold* _italic_`
 * `mew.html` *toggle*. Switch on HTML parsing mode, which supports a subset of tags: `<b> <i> <a href=""> <code> <pre>`
 * `mew.noPreview` *toggle*. Disable link previews.
@@ -159,7 +183,10 @@ rpy.reply_markup = JSON.stringify({force_reply: true}) // Modify rpy
 rpy(`_Meow_ you're in reply mode!`) // Markdown & force_reply
 ```
 
-### mew = mews.twitter(consumer\_key, consumer\_secret, token, token_secret, ...output)
+## Twitter
+```js
+mew = mews.twitter(consumer_key, consumer_secret, token, token_secret, ...output)
+```
 Send a tweet on twitter with the provided app and account details. You can grab some from Twitter's [Application Management site](https://apps.twitter.com).
 
 * `consumer_key` *string*. Twitter app consumer key (api key)
@@ -168,8 +195,7 @@ Send a tweet on twitter with the provided app and account details. You can grab 
 * `token_secret` *string*. Twitter user access token secret
 * `...output` Desired output.
 
-#### twitter configuration
-
+### Configuration
 * `mew.sensitive` *toggle*. Flags your tweet as potentially containing sensitive content.
 * `mew.replyTo = ''` *string*. The ID of a tweet you would like to reply to. This doesn't do anything unless your tweet text contains `@username`, where `username` is the username of the account that tweeted the tweet.
 * `mew.dm = ''` *string*. If this is set, your message will be sent as a DM to a recipient specified by this value. If this value contains only digits, it will be treated as a user ID. If it contains anything other than digits, it will be considered a username. You must include a `@` before a username that is all digits (to differentiate it from a user id), but it's optional otherwise.
