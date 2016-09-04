@@ -1,11 +1,10 @@
 {
   "name": "mews",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "trust your output to a mews",
   "main": "lib/index.js",
   "scripts": {
     "test": "npm link tape && tape test/*.js",
-
     "node": "node -i -e \"const $ = require('.')\""
   },
   "repository": {
