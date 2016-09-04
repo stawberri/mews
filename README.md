@@ -153,6 +153,12 @@ Providing a string as `details` is equivalent to providing an object with only a
 * `mew.attachments = ''` *string*. A json string following [Slack's attachment spec](https://api.slack.com/docs/message-attachments).
 * `mew.noPreview` *toggle*. Disables all link previews.
 
+```js
+let mew = mews.slack(apiToken, channel)
+mew('This is a normal, fully parsed message that shows link previews.')
+mew.noParse('<https://api.slack.com/docs/message-formatting|This syntax> is difficult to use.')
+```
+
 ## Telegram
 ```js
 mew = mews.telegram(botToken, chatID, ...output)
