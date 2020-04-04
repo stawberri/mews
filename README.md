@@ -3,6 +3,7 @@ trust your output to a mews
 
 [![NPM](https://nodei.co/npm/mews.png?mini=true)](https://nodei.co/npm/mews/)
 [![Build Status](https://travis-ci.org/stawberri/mews.svg?branch=master)](https://travis-ci.org/stawberri/mews)
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 mews are intended to make sending messages on [Slack](#slack), [Telegram](#telegram), and [Twitter](#twitter) as easy as using `console.log`.
 
